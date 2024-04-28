@@ -53,3 +53,10 @@ class Icone(Base):
     created_at = Column(TIMESTAMP)
     updated_at = Column(TIMESTAMP)
 
+class IconeCreate(BaseModel):
+    ico_name: str
+    ico_url: str
+
+class IconeUpdate(BaseModel):
+    ico_name: str
+    ico_url: str

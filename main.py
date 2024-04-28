@@ -100,6 +100,47 @@ def delete_status(status_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Status deleted successfully"}
 
+
+@app.get("/icones/")
+def read_icones(db: Session = Depends(get_db)):
+    icones = db.query(models.Icone).all()
+    return icones
+
+@app.post("/icones/")
+def create_icone(icone: models.IconeCreate, db: Session = Depends(get_db)):
+    db_icone = models.Icone(**icone.dict())
+    db.add(db_icone)
+    db.commit()
+    db.refresh(db_icone)
+    return db_icone
+
+@app.get("/icones/{icone_id}")
+def read_icone(icone_id: int, db: Session = Depends(get_db)):
+    icone = db.query(models.Icone).filter(models.Icone.icone_id == icone_id).first()
+    if icone is None:
+        raise HTTPException(status_code=404, detail="Icone not found")
+    return icone
+
+@app.put("/icones/{icone_id}")
+def update_icone(icone_id: int, icone: models.IconeUpdate, db: Session = Depends(get_db)):
+    db_icone = db.query(models.Icone).filter(models.Icone.icone_id == icone_id).first()
+    if db_icone is None:
+        raise HTTPException(status_code=404, detail="Icone not found")
+    for key, value in icone.dict().items():
+        setattr(db_icone, key, value)
+    db.commit()
+    db.refresh(db_icone)
+    return db_icone
+
+@app.delete("/icones/{icone_id}")
+def delete_icone(icone_id: int, db: Session = Depends(get_db)):
+    icone = db.query(models.Icone).filter(models.Icone.icone_id == icone_id).first()
+    if icone is None:
+        raise HTTPException(status_code=404, detail="Icone not found")
+    db.delete(icone)
+    db.commit()
+    return {"message": "Icone deleted successfully"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
