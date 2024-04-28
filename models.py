@@ -15,24 +15,6 @@ class Task(Base):
     created_at = Column(TIMESTAMP)
     updated_at = Column(TIMESTAMP)
 
-class Status(Base):
-    __tablename__ = 'status'
-
-    status_id = Column(Integer, primary_key=True, autoincrement=True)
-    sts_name = Column(String(255))
-    sts_icon = Column(String(500))
-    created_at = Column(TIMESTAMP)
-    updated_at = Column(TIMESTAMP)
-
-class Icone(Base):
-    __tablename__ = 'icone'
-
-    icone_id = Column(Integer, primary_key=True, autoincrement=True)
-    ico_name = Column(String(255))
-    ico_url = Column(String(255))
-    created_at = Column(TIMESTAMP)
-    updated_at = Column(TIMESTAMP)
-
 class TaskCreate(BaseModel):
     tsk_name: str
     tsk_description: Optional[str] = None
@@ -44,3 +26,30 @@ class TaskUpdate(BaseModel):
     tsk_description: Optional[str] = None
     status_id: Optional[int] = None
     icone_id: Optional[int] = None
+
+class Status(Base):
+    __tablename__ = 'status'
+
+    status_id = Column(Integer, primary_key=True, autoincrement=True)
+    sts_name = Column(String(255))
+    sts_icon = Column(String(500))
+    created_at = Column(TIMESTAMP)
+    updated_at = Column(TIMESTAMP)
+
+class StatusCreate(BaseModel):
+    sts_name: str
+    sts_icon: Optional[str] = None
+
+class StatusUpdate(BaseModel):
+    sts_name: str
+    sts_icon: Optional[str] = None
+
+class Icone(Base):
+    __tablename__ = 'icone'
+
+    icone_id = Column(Integer, primary_key=True, autoincrement=True)
+    ico_name = Column(String(255))
+    ico_url = Column(String(255))
+    created_at = Column(TIMESTAMP)
+    updated_at = Column(TIMESTAMP)
+

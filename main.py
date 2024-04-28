@@ -59,6 +59,47 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Task deleted successfully"}
 
+@app.get("/status/")
+def read_all_status(db: Session = Depends(get_db)):
+    status = db.query(models.Status).all()
+    return status
+
+@app.post("/status/")
+def create_status(status: models.StatusCreate, db: Session = Depends(get_db)):
+    db_status = models.Status(**status.dict())
+    db.add(db_status)
+    db.commit()
+    db.refresh(db_status)
+    return db_status
+
+@app.get("/status/{status_id}")
+def read_status(status_id: int, db: Session = Depends(get_db)):
+    status = db.query(models.Status).filter(models.Status.status_id == status_id).first()
+    if status is None:
+        raise HTTPException(status_code=404, detail="Status not found")
+    return status
+
+
+@app.put("/status/{status_id}")
+def update_status(status_id: int, status: models.StatusUpdate, db: Session = Depends(get_db)):
+    db_status = db.query(models.Status).filter(models.Status.status_id == status_id).first()
+    if db_status is None:
+        raise HTTPException(status_code=404, detail="Status not found")
+    for key, value in status.dict().items():
+        setattr(db_status, key, value)
+    db.commit()
+    db.refresh(db_status)
+    return db_status
+
+@app.delete("/status/{status_id}")
+def delete_status(status_id: int, db: Session = Depends(get_db)):
+    status = db.query(models.Status).filter(models.Status.status_id == status_id).first()
+    if status is None:
+        raise HTTPException(status_code=404, detail="Status not found")
+    db.delete(status)
+    db.commit()
+    return {"message": "Status deleted successfully"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
