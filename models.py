@@ -33,16 +33,19 @@ class Status(Base):
     status_id = Column(Integer, primary_key=True, autoincrement=True)
     sts_name = Column(String(255))
     sts_icon = Column(String(500))
+    sts_color = Column(String(255))
     created_at = Column(TIMESTAMP)
     updated_at = Column(TIMESTAMP)
 
 class StatusCreate(BaseModel):
     sts_name: str
-    sts_icon: Optional[str] = None
+    sts_icon: Optional[str] = None,
+    sts_color:Optional[str] = None
 
 class StatusUpdate(BaseModel):
     sts_name: str
-    sts_icon: Optional[str] = None
+    sts_icon: Optional[str] = None,
+    sts_color:Optional[str] = None
 
 class Icone(Base):
     __tablename__ = 'icone'
