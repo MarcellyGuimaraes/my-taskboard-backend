@@ -8,6 +8,13 @@ import models
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 # Função para obter uma sessão do banco de dados
 def get_db():
     db = SessionLocal()
